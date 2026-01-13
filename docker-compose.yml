@@ -10,9 +10,12 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    networks:
+      - app-network
 
   mysql:
     image: mysql:5.7
+    hostname: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: myapp
@@ -28,7 +31,15 @@ services:
       timeout: 3s
       retries: 10
       start_period: 30s
+    networks:
+      - app-network
 
 volumes:
   php-data:
   mysql-data:
+
+
+networks:
+  app-network:
+    driver: overlay
+    attachable: true
